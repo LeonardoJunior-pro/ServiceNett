@@ -30,6 +30,9 @@ export default ({ mode }) => {
         },
       },
     },
+    build: {
+      chunkSizeWarningLimit: 1000, // Set chunk size limit to 1000 KB
+    },
   };
   return defineConfig(config);
 };
