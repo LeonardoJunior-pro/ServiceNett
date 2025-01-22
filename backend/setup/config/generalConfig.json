@@ -1,0 +1,23 @@
+[
+  {
+    "settingCategory": "general_settings",
+    "settingKey": "interval",
+    "settingValue": "6",
+    "valueType": "string",
+    "isCoreSetting": true
+  },
+  {
+    "settingCategory": "general_settings",
+    "settingKey": "email_enabled",
+    "settingValue": "true",
+    "valueType": "boolean",
+    "isCoreSetting": true
+  },
+  {
+    "settingCategory": "general_settings",
+    "settingKey": "sms_enabled",
+    "settingValue": "true",
+    "valueType": "boolean",
+    "isCoreSetting": true
+  }
+]

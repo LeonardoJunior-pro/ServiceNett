@@ -1,0 +1,16 @@
+[
+  {
+    "emailKey": "email_template_default",
+    "emailName": "Email Notification",
+    "emailSubject": "Equipment Calibraion",
+    "emailBody": "<p>email_invoice_default</p>",
+    "emailVariables": ["contact", "equipment", "serial", "date"]
+  },
+  {
+    "emailKey": "sms_template_default",
+    "emailName": "SMS Notification",
+    "emailSubject": "Equipment Calibraion",
+    "emailBody": "<p>sms_template_default</p>",
+    "emailVariables": ["contact", "equipment", "serial", "date"]
+  }
+]
