@@ -4,6 +4,7 @@
   "engines": {
     "npm": "10.7.0"
   },
+  "homepage": ".",
   "dependencies": {
     "@ant-design/icons": "^5.2.6",
     "@ant-design/pro-layout": "^7.17.12",
