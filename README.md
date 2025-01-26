@@ -123,5 +123,4 @@ npm run start
 Once the website is up and running, you can log in using the following credentials:
 
 
-
 Now you should be all set to run the project locally on your machine and explore its features.
