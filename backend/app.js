@@ -31,10 +31,17 @@ app.use(function (req, res, next) {
   next();
 });
 
+// const corsOptions = {
+//   origin: true,
+//   credentials: true,
+// };
+
 const corsOptions = {
-  origin: true,
-  credentials: true,
+  origin: 'https://servicenett.vercel.app', // Replace with your deployed frontend URL
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
+  credentials: true, // If using cookies or authentication headers
 };
+
 app.use(cors(corsOptions));
 
 // Enable CORS for multiple origins
