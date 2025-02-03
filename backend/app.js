@@ -23,25 +23,19 @@ const notificationController = require('@/controllers/appControllers/notificatio
 // create our Express app
 const app = express();
 
-app.use(function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Credentials', 'true');
-  next();
-});
-
-// const corsOptions = {
-//   origin: true,
-//   credentials: true,
-// };
+// app.use(function (req, res, next) {
+//   res.header('Access-Control-Allow-Origin', '*');
+//   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+//   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+//   res.header('Access-Control-Allow-Credentials', 'true');
+//   res.header('ngrok-skip-browser-warning', '69420');
+//   next();
+// });
 
 const corsOptions = {
-  origin: 'https://servicenett.vercel.app', // Replace with your deployed frontend URL
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allowed HTTP methods
-  credentials: true, // If using cookies or authentication headers
+  origin: true,
+  credentials: true,
 };
-
 app.use(cors(corsOptions));
 
 // Enable CORS for multiple origins

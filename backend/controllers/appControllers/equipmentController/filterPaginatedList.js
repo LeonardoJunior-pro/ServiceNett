@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const Model = mongoose.model('Equipment');
 
-const paginatedList = async (req, res) => {
+const filterPaginatedList = async (req, res) => {
   const page = req.query.page || 1;
   const limit = parseInt(req.query.items) || 10;
   const skip = page * limit - limit;
@@ -47,4 +47,4 @@ const paginatedList = async (req, res) => {
   }
 };
 
-module.exports = paginatedList;
+module.exports = filterPaginatedList;

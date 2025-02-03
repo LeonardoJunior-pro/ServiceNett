@@ -378,7 +378,9 @@ router.route('/customer/list').get(hasPermission('read'), catchErrors(customerCo
 router
   .route('/customer/listAll')
   .get(hasPermission('read'), catchErrors(customerController.listAll));
-router.route('/customer/summary').get(hasPermission('read'), catchErrors(customerController.summary));
+router
+  .route('/customer/summary')
+  .get(hasPermission('read'), catchErrors(customerController.summary));
 
 // //_________________________________________________________________API for Equipments_____________________
 
@@ -395,7 +397,15 @@ router
   .route('/equipment/delete/:id')
   .delete(hasPermission('delete'), catchErrors(equipmentController.delete));
 router.route('/equipment/list').get(hasPermission('read'), catchErrors(equipmentController.list));
-router.route('/equipment/summary').get(hasPermission('read'), catchErrors(equipmentController.summary));
+router
+  .route('/equipment/summary')
+  .get(hasPermission('read'), catchErrors(equipmentController.summary));
+router
+  .route('/equipment/filterfields')
+  .get(hasPermission('read'), catchErrors(equipmentController.filterfields));
+router
+  .route('/equipment/filterData')
+  .get(hasPermission('read'), catchErrors(equipmentController.filter));
 
 // //_________________________________________________________________API for User Management_____________________
 
@@ -421,6 +431,9 @@ router
 router
   .route('/notification/list')
   .get(hasPermission('read'), catchErrors(notificationController.list));
+router
+  .route('/notification/duringFilter')
+  .get(hasPermission('read'), catchErrors(notificationController.duringFilter));
 
 router
   .route('/upcoming/list')
