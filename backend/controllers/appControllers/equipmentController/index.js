@@ -3,7 +3,7 @@ const methods = createCRUDController('Equipment');
 
 const create = require('./create');
 const remove = require('./remove');
-// const update = require('./update');
+const update = require('./update');
 const paginatedList = require('./paginatedList');
 const filterFieldsList = require('./filterFieldsList');
 const filterPaginatedList = require('./filterPaginatedList');
@@ -20,7 +20,7 @@ methods.filterfields = filterFieldsList;
 // methods.read = read;
 
 // methods.create = create;
-// methods.update = update;
+methods.update = update;
 methods.summary = summary;
 
 module.exports = methods;

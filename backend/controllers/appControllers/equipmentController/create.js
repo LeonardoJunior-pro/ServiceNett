@@ -13,7 +13,10 @@ const create = async (req, res) => {
     await notificationController.create(result);
     await CustomerModel.updateOne(
       { _id: result.createdBy }, // Find the specific customer by ID
-      { $push: { equipments: result._id } } // Add the new equipment ID to the array
+      { 
+        $push: { equipments: result._id }, 
+        $inc: { equipmentCount: 1 },
+      } // Add the new equipment ID to the array
     );
     result = await Model.find({ _id: result._id })
       .populate('createdBy', 'name');

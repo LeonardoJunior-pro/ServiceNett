@@ -14,7 +14,7 @@ const upcoming = async (req, res) => {
     endDate.setDate(startDate.getDate() + (7 - startDay));
 
     const resultsPromise = Model.find({
-      date: { $gte: startDate, $lte: endDate },
+      // date: { $gte: startDate, $lte: endDate },
       status: 'pending',
       removed: false,
     })

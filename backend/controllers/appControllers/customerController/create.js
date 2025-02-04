@@ -50,7 +50,7 @@ const create = async (req, res) => {
     return res.status(200).json({
       success: true,
       result: updateResult,
-      message: 'Quote created successfully',
+      message: 'Customer created successfully',
     });
   } catch (error) {
     // If error is thrown by Mongoose due to required validations

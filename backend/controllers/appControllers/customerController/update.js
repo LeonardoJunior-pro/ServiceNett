@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const Model = mongoose.model('Customer');
 const EquipmentModel = mongoose.model('Equipment');
 
+const notificationController = require('@/controllers/appControllers/notificationController');
+
 const update = async (req, res) => {
   try {
     const { contacts = [], equipments = [] } = req.body;
@@ -17,7 +19,7 @@ const update = async (req, res) => {
       let equipment = equipments[i];
       if (equipment._id) {
         equipment['lastDate'] = equipment.nextDate;
-        await new EquipmentModel.findOneAndUpdate(
+        await EquipmentModel.findOneAndUpdate(
           { _id: equipment._id, removed: false },
           equipment,
           {
@@ -29,6 +31,7 @@ const update = async (req, res) => {
         equipment['lastDate'] = equipment.nextDate;
         equipment['createdBy'] = req.params.id;
         const equipment_result = await new EquipmentModel(equipment).save();
+        await notificationController.create(equipment_result);
         equipment_IDs.push(equipment_result._id);
       }
     }
@@ -44,7 +47,7 @@ const update = async (req, res) => {
     return res.status(200).json({
       success: true,
       result,
-      message: 'we update this document by this id: ' + req.params.id,
+      message: 'Customer updated successfully',
     });
   } catch (error) {
     // If error is thrown by Mongoose due to required validations

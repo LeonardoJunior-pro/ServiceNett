@@ -19,24 +19,27 @@ const remove = async (req, res) => {
     ).exec();
 
     await NotificationModel.findOneAndUpdate(
-      { equipment: req.params.id, removed: false, status: 'pending'},
-      { sort: {date: "desc"}},
+      { equipment: req.params.id, removed: false, status: 'pending' },
       { $set: updates },
       {
+        sort: { date: -1 },
         new: true, // return the new result instead of the old one
       }
     ).exec();
 
     await CustomerModel.updateMany(
       { equipments: req.params.id }, // Find customers where equipment contains the ID
-      { $pull: { equipments: req.params.id } } // Remove the specific equipment ID from the array
+      {
+        $pull: { equipments: req.params.id },
+        $inc: { equipmentCount: -1 },
+      } // Remove the specific equipment ID from the array
     );
 
     // Returning successfull response
     return res.status(200).json({
       success: true,
       result,
-      message: 'we update this document by this id: ' + req.params.id,
+      message: 'Equipment removed successfully',
     });
   } catch (error) {
     // If error is thrown by Mongoose due to required validations
