@@ -2,13 +2,14 @@ const mongoose = require('mongoose');
 
 const Model = mongoose.model('Notification');
 
-const paginatedList = async (req, res) => {
-  // const page = req.query.page || 1;
-  // const limit = parseInt(req.query.items) || 10;
-  // const skip = page * limit - limit;
+const logList = async (req, res) => {
+  const page = req.query.page || 1;
+  const limit = parseInt(req.query.items) || 10;
+  const skip = page * limit - limit;
   try {
     //  Query the database for a list of all results
-    const resultsPromise = Model.find({})
+    const startDate = new Date();
+    const resultsPromise = Model.find({ removed: false, date: { $lte: startDate } })
       .sort({ created: 'desc' })
       .populate({
         path: 'equipment',
@@ -22,21 +23,22 @@ const paginatedList = async (req, res) => {
     // Resolving both promises
     const [result, count] = await Promise.all([resultsPromise, countPromise]);
     // Calculating total pages
-    // const pages = Math.ceil(count / limit);
+    const pages = Math.ceil(count / limit);
 
     // Getting Pagination Object
+    const pagination = { page, pages, count };
     if (count > 0) {
       return res.status(200).json({
         success: true,
         result,
-        // pagination,
+        pagination,
         message: 'Successfully found all documents',
       });
     } else {
       return res.status(203).json({
         success: true,
         result: [],
-        // pagination,
+        pagination,
         message: 'Collection is Empty',
       });
     }
@@ -50,4 +52,4 @@ const paginatedList = async (req, res) => {
   }
 };
 
-module.exports = paginatedList;
+module.exports = logList;

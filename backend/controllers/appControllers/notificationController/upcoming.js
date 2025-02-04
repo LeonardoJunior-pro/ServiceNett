@@ -25,7 +25,7 @@ const upcoming = async (req, res) => {
         path: 'equipment',
         populate: {
           path: 'createdBy',
-          mode: 'Customer',
+          model: 'Customer',
         },
       });
     // Counting the total documents

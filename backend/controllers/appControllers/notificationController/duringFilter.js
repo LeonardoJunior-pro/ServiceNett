@@ -24,7 +24,7 @@ const duringFilter = async (req, res) => {
         path: 'equipment',
         populate: {
           path: 'createdBy',
-          mode: 'Customer',
+          model: 'Customer',
         },
       });
     // Resolving both promises

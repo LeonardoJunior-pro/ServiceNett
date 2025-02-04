@@ -33,7 +33,7 @@ const sendMail = async () => {
       path: 'equipment',
       populate: {
         path: 'createdBy',
-        mode: 'Customer',
+        model: 'Customer',
       },
     });
 

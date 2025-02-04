@@ -12,8 +12,6 @@ const create = async (equipment) => {
     // Creating a new document in the collection
     const result = await new Model(notification).save();
 
-    await new Model(notification).save();
-
     // Returning successfull response
     return true;
   } catch (error) {

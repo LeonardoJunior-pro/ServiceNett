@@ -435,6 +435,9 @@ router
   .route('/notification/duringFilter')
   .get(hasPermission('read'), catchErrors(notificationController.duringFilter));
 
+  router
+  .route('/notification/logs')
+  .get(hasPermission('read'), catchErrors(notificationController.logs));
 router
   .route('/upcoming/list')
   .get(hasPermission('read'), catchErrors(notificationController.upcoming));
