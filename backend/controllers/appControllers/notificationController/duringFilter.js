@@ -30,9 +30,14 @@ const duringFilter = async (req, res) => {
     // Resolving both promises
     const [result] = await Promise.all([resultsPromise]);
 
+    const filterResult = result.filter(
+      (item, index, self) => 
+        index === self.findIndex((t) => new Date(t.date).getDate() === (new Date(item.date).getDate()))
+    );
+
     return res.status(200).json({
       success: true,
-      result,
+      result: filterResult,
       message: 'Successfully during filter',
     });
   } catch (error) {

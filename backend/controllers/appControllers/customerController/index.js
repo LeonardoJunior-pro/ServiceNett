@@ -7,6 +7,7 @@ const paginatedList = require('./paginatedList');
 const read = require('./read');
 const allList = require('./all');
 const summary = require('./summary');
+const remove = require('./remove');
 
 methods.list = paginatedList;
 methods.listAll = allList;
@@ -15,5 +16,6 @@ methods.read = read;
 methods.create = create;
 methods.update = update;
 methods.summary = summary;
+methods.delete = remove;
 
 module.exports = methods;

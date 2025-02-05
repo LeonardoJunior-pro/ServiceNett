@@ -18,8 +18,8 @@ const upcoming = async (req, res) => {
       status: 'pending',
       removed: false,
     })
-      .skip(skip)
-      .limit(limit)
+      // .skip(skip)
+      // .limit(limit)
       .sort({ date: 'asc' })
       .populate({
         path: 'equipment',
@@ -41,7 +41,7 @@ const upcoming = async (req, res) => {
       return res.status(200).json({
         success: true,
         result,
-        pagination,
+        // pagination,
         message: 'Successfully found all documents',
       });
     } else {

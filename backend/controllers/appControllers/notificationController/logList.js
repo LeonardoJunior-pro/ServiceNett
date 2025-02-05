@@ -9,7 +9,11 @@ const logList = async (req, res) => {
   try {
     //  Query the database for a list of all results
     const startDate = new Date();
-    const resultsPromise = Model.find({ removed: false, date: { $lte: startDate } })
+    const resultsPromise = Model.find({
+      removed: false,
+      date: { $lte: startDate },
+      status: { $ne: 'pending' },
+    })
       .sort({ created: 'desc' })
       .populate({
         path: 'equipment',
@@ -26,12 +30,12 @@ const logList = async (req, res) => {
     const pages = Math.ceil(count / limit);
 
     // Getting Pagination Object
-    const pagination = { page, pages, count };
+    // const pagination = { page, pages, count };
     if (count > 0) {
       return res.status(200).json({
         success: true,
         result,
-        pagination,
+        // pagination,
         message: 'Successfully found all documents',
       });
     } else {
