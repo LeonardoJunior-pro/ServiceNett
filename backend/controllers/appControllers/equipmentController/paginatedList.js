@@ -9,8 +9,8 @@ const paginatedList = async (req, res) => {
   try {
     //  Query the database for a list of all results
     const resultsPromise = Model.find({ removed: false })
-      .skip(skip)
-      .limit(limit)
+      // .skip(skip)
+      // .limit(limit)
       .sort({ created: 'desc' })
       .populate('createdBy', 'name');
     // Counting the total documents
