@@ -38,7 +38,7 @@ export default function PaymentForm({ maxAmount = null, isUpdateForm = false }) 
         initialValue={dayjs().add(30, 'days')}
         style={{ width: '100%' }}
       >
-        <DatePicker format={'DD/MM/YYYY'} style={{ width: '100%' }} />
+        <DatePicker format={'MM/DD/YYYY'} style={{ width: '100%' }} />
       </Form.Item>
       <Form.Item label={translate('amount')} name="amount" rules={[{ required: true }]}>
         <InputNumber

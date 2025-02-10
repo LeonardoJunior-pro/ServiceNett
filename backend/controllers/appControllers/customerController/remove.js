@@ -19,16 +19,15 @@ const remove = async (req, res) => {
     );
 
     if (result) {
-      console.log("result =>", result);
       await EquipmentModel.updateMany(
         { _id: { $in: result.equipments }, removed: false },
         { $set: updates }
       );
 
-      await NotificationModel.updateMany(
-        { equipment: { $in: result.equipments }, removed: false },
-        { $set: updates }
-      );
+      // await NotificationModel.updateMany(
+      //   { equipment: { $in: result.equipments }, removed: false },
+      //   { $set: updates }
+      // );
 
       // await NotificationModel.deleteMany(
       //   { equipment: { $in: result.equipments }, removed: false },

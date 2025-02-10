@@ -11,7 +11,6 @@ const update = async (req, res) => {
       new: true, // return the new result instead of the old one
     }).exec();
 
-    console.log("req.params.id =>", req.params.id);
     result = await Model.find({ _id: req.params.id, removed: false })
       .populate('createdBy', 'name');
 

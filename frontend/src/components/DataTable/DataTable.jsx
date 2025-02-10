@@ -2,6 +2,9 @@ import { useCallback, useEffect } from 'react';
 import { EyeOutlined, EditOutlined, DeleteOutlined, EllipsisOutlined } from '@ant-design/icons';
 import { Descriptions, Dropdown, Table, Button } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
+import xlsx from 'better-xlsx';
+import objectPath from 'object-path';
+import { saveAs } from 'file-saver';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { crud } from '@/redux/crud/actions';
@@ -11,6 +14,7 @@ import useLanguage from '@/locale/useLanguage';
 import { generate as uniqueId } from 'shortid';
 import useResponsiveTable from '@/hooks/useResponsiveTable';
 import { useCrudContext } from '@/context/crud';
+import dayjs from 'dayjs';
 
 function AddNewItem({ config }) {
   const { crudContextAction } = useCrudContext();
@@ -31,7 +35,7 @@ function AddNewItem({ config }) {
 export default function DataTable({ config, extra = [] }) {
   let { entity, dataTableColumns, DATATABLE_TITLE } = config;
   const { crudContextAction } = useCrudContext();
-  const { panel, collapsedBox, modal, readBox, editBox, advancedBox } = crudContextAction;
+  const { panel, collapsedBox, modal, readBox, editBox } = crudContextAction;
   const translate = useLanguage();
 
   const items = [
@@ -57,6 +61,29 @@ export default function DataTable({ config, extra = [] }) {
     },
   ];
 
+  const exportField = [
+    {
+      title: translate('Equipment Name'),
+      dataIndex: 'name',
+    },
+    {
+      title: translate('Serial Number'),
+      dataIndex: 'serial',
+    },
+    {
+      title: translate('Customer Name'),
+      dataIndex: ['createdBy', 'name'],
+    },
+    {
+      title: translate('Contact Person'),
+      dataIndex: 'contact',
+    },
+    {
+      title: translate('Last Calibration Date'),
+      dataIndex: 'lastDate',
+    },
+  ];
+
   const handleRead = (record) => {
     dispatch(crud.currentItem({ data: record }));
     panel.open();
@@ -73,14 +100,6 @@ export default function DataTable({ config, extra = [] }) {
   function handleDelete(record) {
     dispatch(crud.currentAction({ actionType: 'delete', data: record }));
     modal.open();
-  }
-
-  function handleUpdatePassword(record) {
-    dispatch(crud.currentItem({ data: record }));
-    dispatch(crud.currentAction({ actionType: 'update', data: record }));
-    advancedBox.open();
-    panel.open();
-    collapsedBox.open();
   }
 
   dataTableColumns = [
@@ -127,12 +146,12 @@ export default function DataTable({ config, extra = [] }) {
 
   const { result: listResult, isLoading: listIsLoading } = useSelector(selectListItems);
 
-  const { pagination, items: dataSource } = listResult;
+  const { items: dataSource } = listResult;
 
   const dispatch = useDispatch();
 
   const handelDataTableLoad = useCallback((pagination) => {
-    const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };
+    const options = { page: pagination.current || 1, items: pagination.pageSize || 5 };
     dispatch(crud.list({ entity, options }));
   }, []);
 
@@ -153,6 +172,32 @@ export default function DataTable({ config, extra = [] }) {
     items
   );
 
+  const exportClick = () => {
+    const file = new xlsx.File();
+    const sheet = file.addSheet('equipment');
+    const headerRow = sheet.addRow();
+    exportField.forEach(({ title, render }) => {
+      if (render) return;
+      const cell = headerRow.addCell();
+      cell.value = title;
+    });
+    dataSource.forEach((record) => {
+      const row = sheet.addRow();
+      exportField.forEach(({ dataIndex, render }) => {
+        if (render) return;
+        const cell = row.addCell();
+        cell.value = objectPath.get(record, dataIndex);
+        if (dataIndex == 'lastDate') {
+          cell.value = dayjs(cell.value).format('MM/DD/YYYY');
+        }
+      });
+    });
+
+    file.saveAs('blob').then((blob) => {
+      saveAs(blob, `equipment_${dayjs().format('YYYY_MM_DD')}.xlsx`);
+    });
+  };
+
   return (
     <>
       <div ref={tableHeader}>
@@ -165,6 +210,9 @@ export default function DataTable({ config, extra = [] }) {
               {translate('Refresh')}
             </Button>,
             <AddNewItem key={`${uniqueId()}`} config={config} />,
+            <Button onClick={exportClick} key={`${uniqueId()}`} type="primary">
+              {translate('Export')}
+            </Button>,
           ]}
           style={{
             padding: '20px 0px',
@@ -175,7 +223,7 @@ export default function DataTable({ config, extra = [] }) {
         columns={tableColumns}
         rowKey={(item) => item._id}
         dataSource={dataSource}
-        pagination={pagination}
+        pagination={{pageSize: 5,}}
         loading={listIsLoading}
         onChange={handelDataTableLoad}
         expandable={

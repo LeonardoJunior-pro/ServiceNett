@@ -1,6 +1,3 @@
-import dayjs from 'dayjs';
-import { Tag } from 'antd';
-
 import CustomerDataTableModule from '@/modules/CustomerModule/CustomerDataTableModule';
 import useLanguage from '@/locale/useLanguage';
 
@@ -19,12 +16,12 @@ export default function Customer() {
       dataIndex: 'name',
     },
     {
-      title: translate('Equipment Count'),
-      dataIndex: 'equipmentCount',
-    },
-    {
       title: translate('Primary Contact'),
       dataIndex: 'primaryContact',
+    },
+    {
+      title: translate('Equipment Count'),
+      dataIndex: 'equipmentCount',
     },
     {
       title: translate('Last Activity'),

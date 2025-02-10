@@ -47,7 +47,7 @@ export default function DeleteModal({ config }) {
     readBox.close();
     modal.close();
     panel.close();
-    navMenu.collapse();
+    // navMenu.collapse();
     dispatch(crud.list({ entity }));
   };
   const handleCancel = () => {

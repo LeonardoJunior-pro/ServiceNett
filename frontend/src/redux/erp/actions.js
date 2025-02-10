@@ -34,7 +34,7 @@ export const erp = {
       });
     },
   list:
-    ({ entity, options = { page: 1, items: 10 } }) =>
+    ({ entity, options = { page: 1, items: 5 } }) =>
     async (dispatch) => {
       dispatch({
         type: actionTypes.REQUEST_LOADING,
@@ -49,7 +49,7 @@ export const erp = {
           items: data.result,
           pagination: {
             current: parseInt(data.pagination.page, 10),
-            pageSize: options?.items || 10,
+            pageSize: options?.items || 5,
             total: parseInt(data.pagination.count, 10),
           },
         };

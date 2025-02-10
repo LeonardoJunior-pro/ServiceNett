@@ -10,6 +10,7 @@ import useLanguage from '@/locale/useLanguage';
 import { useNavigate } from 'react-router-dom';
 import { DOWNLOAD_BASE_URL } from '@/config/serverApiConfig';
 import useResponsiveTable from '@/hooks/useResponsiveTable';
+import { useEffect } from 'react';
 
 export default function RecentTable({ ...props }) {
   const translate = useLanguage();
@@ -90,48 +91,25 @@ export default function RecentTable({ ...props }) {
     return request.list({ entity });
   };
   const { result, isLoading, isSuccess } = useFetch(asyncList);
-  const firstFiveItems = () => {
-    if (isSuccess && result) return result.slice(0, 5);
+  const resultItems = () => {
+    if (isSuccess && result) return result;
     return [];
   };
 
   const { expandedRowData, tableColumns, tableHeader } = useResponsiveTable(
     dataTableColumns,
-    firstFiveItems()
+    resultItems()
   );
 
   return (
     <div ref={tableHeader}>
       <Table
-        columns={tableColumns}
+        columns={dataTableColumns}
         rowKey={(item) => item._id}
         // dataSource={isSuccess && firstFiveItems()}
-        dataSource={firstFiveItems()}
-        pagination={true}
+        dataSource={resultItems()}
+        pagination={{pageSize: 5}}
         loading={isLoading}
-        expandable={
-          expandedRowData.length
-            ? {
-                expandedRowRender: (record) => (
-                  <Descriptions title="" bordered column={1}>
-                    {expandedRowData.map((item, index) => {
-                      return (
-                        <Descriptions.Item key={index} label={item.title}>
-                          {item.render?.(record[item.dataIndex])?.children
-                            ? item.render?.(record[item.dataIndex])?.children
-                            : item.render?.(record[item.dataIndex])
-                            ? item.render?.(record[item.dataIndex])
-                            : Array.isArray(item.dataIndex)
-                            ? record[item.dataIndex[0]]?.[item.dataIndex[1]]
-                            : record[item.dataIndex]}
-                        </Descriptions.Item>
-                      );
-                    })}
-                  </Descriptions>
-                ),
-              }
-            : null
-        }
       />
     </div>
   );

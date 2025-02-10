@@ -10,7 +10,7 @@ export default ({ mode }) => {
   const proxy_url =
     process.env.VITE_DEV_REMOTE === 'remote'
       ? process.env.VITE_BACKEND_SERVER
-      : 'http://localhost:5000/';
+      : 'http://localhost:8888/';
 
   const config = {
     plugins: [react()],
@@ -29,6 +29,9 @@ export default ({ mode }) => {
           secure: false,
         },
       },
+    },
+    build: {
+      chunkSizeWarningLimit: 1000, // Set chunk size limit to 1000 KB
     },
   };
   return defineConfig(config);

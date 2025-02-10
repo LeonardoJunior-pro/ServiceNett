@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 
-const Model = mongoose.model('Notification');
+const Model = mongoose.model('Equipment');
 
 const upcoming = async (req, res) => {
   const page = req.query.page || 1;
@@ -14,20 +14,14 @@ const upcoming = async (req, res) => {
     endDate.setDate(startDate.getDate() + (7 - startDay));
 
     const resultsPromise = Model.find({
-      // date: { $gte: startDate, $lte: endDate },
-      status: 'pending',
+      nextDate: { $gt: (startDate) },
       removed: false,
     })
       // .skip(skip)
       // .limit(limit)
-      .sort({ date: 'asc' })
-      .populate({
-        path: 'equipment',
-        populate: {
-          path: 'createdBy',
-          model: 'Customer',
-        },
-      });
+      .sort({ nextDate: 'asc' })
+      .populate('createdBy');
+    
     // Counting the total documents
     const countPromise = Model.countDocuments({ removed: false });
     // Resolving both promises

@@ -36,7 +36,7 @@ export const crud = {
       });
     },
   list:
-    ({ entity, options = { page: 1, items: 10 } }) =>
+    ({ entity, options = { page: 1, items: 5 } }) =>
     async (dispatch) => {
       dispatch({
         type: actionTypes.REQUEST_LOADING,

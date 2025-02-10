@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 
 const Model = mongoose.model('Notification');
+const EquipModel = mongoose.model('Equipment');
 
 const duringFilter = async (req, res) => {
   try {
@@ -12,7 +13,7 @@ const duringFilter = async (req, res) => {
     const endDate = new Date(year, month, 1);
 
     //  Query the database for a list of all results
-    const resultsPromise = Model.find({
+    const notificationPromise = Model.find({
       removed: false,
       date: {
         $gte: startDate,
@@ -27,8 +28,31 @@ const duringFilter = async (req, res) => {
           model: 'Customer',
         },
       });
+
+    const equipmentPromise = EquipModel.find({
+      removed: false,
+      nextDate: {
+        $gte: startDate,
+        $lt: endDate,
+      },
+    })
+      .sort({ nextDate: 'desc' });
     // Resolving both promises
-    const [result] = await Promise.all([resultsPromise]);
+    const [pastResult, nextResult] = await Promise.all([notificationPromise, equipmentPromise]);
+
+    let result = [];
+
+    for ( let i = 0; i < pastResult.length; i++) {
+      let item = pastResult[i];
+      if (i === pastResult.findIndex((t) => new Date(t.date).getDate() === new Date(item.date).getDate()))
+        result.push({date: item.date});
+    }
+
+    for ( let i = 0; i < nextResult.length; i++) {
+      let item = nextResult[i];
+      if (i === nextResult.findIndex((t) => new Date(t.nextDate).getDate() === new Date(item.nextDate).getDate()))
+        result.push({date: item.nextDate});
+    }
 
     const filterResult = result.filter(
       (item, index, self) => 

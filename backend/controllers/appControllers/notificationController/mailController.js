@@ -1,10 +1,12 @@
 const { SendEmailNotification, SendSMSNotification } = require('@/emailTemplate/Notification');
 const mongoose = require('mongoose');
 const NotificationModel = mongoose.model('Notification');
+const EquipmentModel = mongoose.model('Equipment');
 const SettingModel = mongoose.model('Setting');
 const EmailTModel = mongoose.model('Email');
 
 const { MailerSend, EmailParams, Sender, Recipient, SMSParams } = require('mailersend');
+const create = require('./create');
 
 const sendMail = async () => {
   let email_setting = await SettingModel.find(
@@ -19,50 +21,55 @@ const sendMail = async () => {
   email_setting = email_setting[0] ? email_setting[0]['settingValue'] : false;
   sms_setting = sms_setting[0] ? sms_setting[0]['settingValue'] : false;
 
-  const startDate = new Date();
-  const endDate = new Date(startDate);
-  endDate.setDate(startDate.getDate() + 2);
+  let startDate = new Date();
+  startDate.setHours(0);
+  startDate.setMinutes(0);
+  let endDate = new Date(startDate);
+  endDate.setDate(startDate.getDate() + 1);
 
-  const results = await NotificationModel.find({
-    // date: { $gte: startDate, $lte: endDate },
+  const results = await EquipmentModel.find({
+    nextDate: { $gte: startDate, $lt: endDate },
     status: 'pending',
     removed: false,
   })
-    .sort({ date: 'asc' })
+    .sort({ nextDate: 'asc' })
     .populate({
-      path: 'equipment',
-      populate: {
-        path: 'createdBy',
-        model: 'Customer',
-      },
+      path: 'createdBy',
     });
 
   for (let i = 0; i < results.length; i++) {
     const notification = results[i];
-    const to_mail = notification['equipment']['createdBy']['email'];
-    const to_sms = notification['equipment']['createdBy']['phone'];
+    const to_mail = notification['createdBy']['email'];
+    const to_sms = notification['createdBy']['phone'];
     let from_mail = '';
     let from_sms = '';
-    for (let j = 0; j < notification['equipment']['createdBy']['contacts'].length; j++) {
-      const contactInfo = notification['equipment']['createdBy']['contacts'][i];
-      if (contactInfo['name'] === notification['equipment']['contact']) {
+    for (let j = 0; j < notification['createdBy']['contacts'].length; j++) {
+      const contactInfo = notification['createdBy']['contacts'][i];
+      if (contactInfo['name'] === notification['contact']) {
         from_mail = contactInfo['email'];
         from_sms = contactInfo['phone'];
+        break;
       }
     }
-    const contact = notification['equipment']['contact'];
-    const equipment = notification['equipment']['name'];
-    const serial = notification['equipment']['serial'];
-    const date = notification['date'];
+    const contact = notification['contact'];
+    const equipment = notification['name'];
+    const serial = notification['serial'];
+    const date = notification['nextDate'];
+
+    let notification_type = '';
 
     if (email_setting) {
-      console.log('email_setting =>');
       sendViaEmailApi(from_mail, to_mail, contact, equipment, serial, date);
+      notification_type += 'Email';
     }
 
     if (sms_setting) {
-      console.log('sms_setting =>');
       // sendViaSMSApi(from_sms, to_sms, contact, equipment, serial, date);
+      notification_type += notification_type.length > 0 ? ', SMS' : 'SMS';
+    }
+
+    if (notification_type.length > 0) {
+      await create(notification, type);
     }
   }
 };
@@ -142,7 +149,7 @@ const sendViaSMSApi = async (from, to, contact, equipment, serial, date) => {
   const text = SendSMSNotification({ title, body, contact, equipment, serial, date });
 
   const mailersend = new MailerSend({
-    apiKey: 'mlsn.b2375f222ebafa19a38e0dd1651be05074f7edd774fc7639c4fe6de62e219fbb',
+    apiKey: process.env.SMS_API_KEY,
   });
   const recipients = [to];
 

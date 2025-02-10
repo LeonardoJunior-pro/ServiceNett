@@ -31,7 +31,7 @@ const update = async (req, res) => {
         equipment['lastDate'] = equipment.nextDate;
         equipment['createdBy'] = req.params.id;
         const equipment_result = await new EquipmentModel(equipment).save();
-        await notificationController.create(equipment_result);
+        // await notificationController.create(equipment_result);
         equipment_IDs.push(equipment_result._id);
       }
     }

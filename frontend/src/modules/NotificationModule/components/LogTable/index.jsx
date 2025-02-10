@@ -13,17 +13,17 @@ export default function LogTable({ ...props }) {
   ];
 
   const asyncList = () => {
-    return request.list({ entity });
+    return request.logList({ entity });
   };
   const { result, isLoading, isSuccess } = useFetch(asyncList);
-  const firstFiveItems = () => {
-    if (isSuccess && result) return result.slice(0, 5);
+  const resultItems = () => {
+    if (isSuccess && result) return result;
     return [];
   };
 
   const { expandedRowData, tableColumns, tableHeader } = useResponsiveTable(
     dataTableColumns,
-    firstFiveItems()
+    resultItems
   );
 
   return (
@@ -31,8 +31,8 @@ export default function LogTable({ ...props }) {
       <Table
         columns={tableColumns}
         rowKey={(item) => item._id}
-        dataSource={isSuccess && firstFiveItems()}
-        pagination={true}
+        dataSource={resultItems()}
+        pagination={{pageSize: 5}}
         loading={isLoading}
         expandable={
           expandedRowData.length

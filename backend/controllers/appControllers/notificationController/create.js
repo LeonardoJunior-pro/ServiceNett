@@ -2,11 +2,12 @@ const mongoose = require('mongoose');
 
 const Model = mongoose.model('Notification');
 
-const create = async (equipment) => {
+const create = async (equipment, type) => {
   try {
     const notification = [];
     notification['equipment'] = equipment['_id'];
-    notification['status'] = 'pending';
+    notification['status'] = 'sent';
+    notification['type'] = type;
     notification['date'] = equipment['nextDate'];
 
     // Creating a new document in the collection

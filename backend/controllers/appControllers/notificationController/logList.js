@@ -11,8 +11,6 @@ const logList = async (req, res) => {
     const startDate = new Date();
     const resultsPromise = Model.find({
       removed: false,
-      date: { $lte: startDate },
-      status: { $ne: 'pending' },
     })
       .sort({ created: 'desc' })
       .populate({

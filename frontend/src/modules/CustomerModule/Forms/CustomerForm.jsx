@@ -1,12 +1,11 @@
 import { useEffect, useRef } from 'react';
 import dayjs from 'dayjs';
-import { Form, Input, Button, Select, Divider, Row, Col } from 'antd';
+import { Form, Input, Button, Select, Divider, Row, Col, DatePicker } from 'antd';
 
 import { PlusOutlined, DeleteOutlined } from '@ant-design/icons';
 
-import { DatePicker } from 'antd';
-
 import useLanguage from '@/locale/useLanguage';
+const { TextArea } = Input;
 
 const ContatItemRow = ({ field, remove }) => {
   return (
@@ -62,7 +61,7 @@ const EquipmentItemRow = ({ field, remove }) => {
 
   return (
     <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-      <Col className="gutter-row" span={5}>
+      <Col className="gutter-row" span={4}>
         <Form.Item
           name={[field.name, 'name']}
           rules={[
@@ -88,7 +87,7 @@ const EquipmentItemRow = ({ field, remove }) => {
           <Input placeholder="123456" />
         </Form.Item>
       </Col>
-      <Col className="gutter-row" span={5}>
+      <Col className="gutter-row" span={4}>
         <Form.Item
           name={[field.name, 'interval']}
           rules={[
@@ -101,27 +100,28 @@ const EquipmentItemRow = ({ field, remove }) => {
         >
           <Select
             options={[
-              { value: '6', label: translate('6 Months') },
-              { value: '12', label: translate('1 Year') },
+              { value: 6, label: translate('6 Months') },
+              { value: 12, label: translate('1 Year') },
+              { value: 24, label: translate('2 Years') },
+              { value: 48, label: translate('4 Years') },
             ]}
           ></Select>
         </Form.Item>
       </Col>
-      <Col className="gutter-row" span={5}>
+      <Col className="gutter-row" span={4}>
         <Form.Item
           name={[field.name, 'nextDate']}
           rules={[
             {
               required: true,
-              type: 'object',
             },
           ]}
-          initialValue={dayjs()}
+          getValueProps={(value) => ({ value: value ? dayjs(value) : null })}
         >
-          <DatePicker style={{ width: '100%' }} format={'DD/MM/YYYY'} />
+          <DatePicker style={{ width: '100%' }} format={'MM/DD/YYYY'} />
         </Form.Item>
       </Col>
-      <Col className="gutter-row" span={5}>
+      <Col className="gutter-row" span={4}>
         <Form.Item
           name={[field.name, 'contact']}
           rules={[
@@ -132,6 +132,13 @@ const EquipmentItemRow = ({ field, remove }) => {
           ]}
         >
           <Input placeholder="James" />
+        </Form.Item>
+      </Col>
+      <Col className="gutter-row" span={4}>
+        <Form.Item
+          name={[field.name, 'description']}
+        >
+          <TextArea rows={1} placeholder="Description" />
         </Form.Item>
       </Col>
       <div style={{ position: 'absolute', right: '-20px', top: ' 5px' }}>
@@ -252,20 +259,23 @@ function LoadCustomerForm({ current = null }) {
 
       <Divider dashed />
       <Row gutter={[12, 12]} style={{ position: 'relative' }}>
-        <Col className="gutter-row" span={5}>
+        <Col className="gutter-row" span={4}>
           <p>{translate('Equipment Name')}</p>
         </Col>
         <Col className="gutter-row" span={4}>
           <p>{translate('Serial Number')}</p>
         </Col>
-        <Col className="gutter-row" span={5}>
+        <Col className="gutter-row" span={4}>
           <p>{translate('Interval')}</p>{' '}
         </Col>
-        <Col className="gutter-row" span={5}>
+        <Col className="gutter-row" span={4}>
           <p>{translate('Calibrate Date')}</p>{' '}
         </Col>
-        <Col className="gutter-row" span={5}>
+        <Col className="gutter-row" span={4}>
           <p>{translate('Contact Person')}</p>{' '}
+        </Col>
+        <Col className="gutter-row" span={4}>
+          <p>{translate('Description')}</p>{' '}
         </Col>
       </Row>
       <Form.List name="equipments">

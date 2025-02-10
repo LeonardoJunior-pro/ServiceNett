@@ -107,11 +107,11 @@ app.use(errorHandlers.productionErrors);
 
 // notificationController.sendMail();
 
-new CronJob('00 00 9 * * *', () => {
+new CronJob('00 00 9 * * *', async () => {
   try {
     console.log('Notification Crop Job run');
-    notificationController.sendMail();
-    notificationController.update();
+    await notificationController.sendMail();
+    await notificationController.update();
   } catch (e) {
     console.log('Nofication Crop Job error : ', e);
   }

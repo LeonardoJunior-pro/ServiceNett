@@ -5,6 +5,7 @@ import { request } from '@/request';
 import useFetch from '@/hooks/useFetch';
 
 import RecentTable from './components/RecentTable';
+import NotificationTable from './components/NotificationTable';
 
 import SummaryCard from './components/SummaryCard';
 import CustomerPreviewCard from './components/CustomerPreviewCard';
@@ -24,53 +25,37 @@ export default function DashboardModule() {
     request.summary({ entity: 'upcoming' })
   );
 
-  const notificationTableColumns = [
-    {
-      title: translate('contact_person'),
-      dataIndex: ['equipment', 'contact'],
-    },
-    {
-      title: translate('equipment'),
-      dataIndex: ['equipment', 'name'],
-    },
-    {
-      title: translate('notification_date'),
-      dataIndex: 'date',
-      render: (date) => {
-        return dayjs(date).format('DD/MM/YYYY');
-      },
-    },
-  ];
-
   const upcomingTableColumns = [
     {
       title: translate('customer_name'),
-      dataIndex: ['equipment', 'createdBy', 'name'],
+      dataIndex: ['createdBy', 'name'],
     },
     {
       title: translate('equipment_name'),
-      dataIndex: ['equipment', 'name'],
+      dataIndex: ['name'],
     },
     {
       title: translate('serial_number'),
-      dataIndex: ['equipment', 'serial'],
+      dataIndex: ['serial'],
     },
     {
       title: translate('calibration_due_date'),
-      dataIndex: ['date'],
+      dataIndex: ['nextDate'],
       render: (date) => {
-        return dayjs(date).format('DD/MM/YYYY');
+        return dayjs(date).format('MM/DD/YYYY');
       },
     },
     {
       title: translate('contact_person'),
-      dataIndex: ['equipment', 'contact'],
+      dataIndex: ['contact'],
     },
     {
       title: translate('Status'),
       dataIndex: 'status',
-      render: (status) => {
-        let color = status === 'pending' ? 'green' : 'volcano';
+      render: () => {
+        // let color = status === 'pending' ? 'green' : 'volcano';
+        let color = 'green';
+        let status = "pending";
 
         return <Tag color={color}>{translate(status)}</Tag>;
       },
@@ -101,7 +86,6 @@ export default function DashboardModule() {
   const cards = entityData.map((data, index) => {
     const { count, entity, isLoading, prefix } = data;
 
-    console.log('data =>', data);
     if (entity === 'offer') return null;
 
     return (
@@ -128,22 +112,22 @@ export default function DashboardModule() {
       <Row gutter={[32, 32]}>{cards}</Row>
       <div className="space30"></div>
       <Row gutter={[32, 32]}>
-        <Col className="gutter-row w-full" sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 18 }}>
+        <Col className="gutter-row w-full" sm={{ span: 16 }} md={{ span: 16 }} lg={{ span: 14 }}>
           <div className="whiteBox shadow pad20" style={{ height: '100%' }}>
             <h3 style={{ color: '#22075e', marginBottom: 5, padding: '0 20px 20px' }}>
-              {translate('Notification')}
+              {translate('Search')}
             </h3>
 
-            <RecentTable entity={'notification'} dataTableColumns={notificationTableColumns} />
+            <NotificationTable entity={'equipment'} />
           </div>
         </Col>
-        <Col className="gutter-row w-full" sm={{ span: 24 }} md={{ span: 24 }} lg={{ span: 6 }}>
+        <Col className="gutter-row w-full" sm={{ span: 16 }} md={{ span: 16 }} lg={{ span: 10 }}>
           {/* <CustomerPreviewCard
             isLoading={clientLoading}
             activeCustomer={clientResult?.active}
             newCustomer={clientResult?.new}
           /> */}
-          <CustomerPreviewCard isLoading={false} activeCustomer={customerResult} newCustomer={100} />
+          <CustomerPreviewCard />
         </Col>
       </Row>
       <div className="space30"></div>
@@ -151,7 +135,7 @@ export default function DashboardModule() {
         <Col className="gutter-row w-full" sm={{ span: 32 }} md={{ span: 32 }} lg={{ span: 32 }}>
           <div className="whiteBox shadow pad20" style={{ height: '100%' }}>
             <h3 style={{ color: '#22075e', marginBottom: 5, padding: '0 20px 20px' }}>
-              {'Upcoming Calibrations (This week)'}
+              {'Upcoming Calibrations'}
             </h3>
 
             <RecentTable entity={'upcoming'} dataTableColumns={upcomingTableColumns} />

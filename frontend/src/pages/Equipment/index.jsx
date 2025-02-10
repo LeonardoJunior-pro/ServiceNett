@@ -3,6 +3,7 @@ import EquipmentForm from '@/forms/EquipmentForm';
 
 import useLanguage from '@/locale/useLanguage';
 import dayjs from 'dayjs';
+import { render } from 'react-dom';
 
 export default function Equipment() {
   const translate = useLanguage();
@@ -32,15 +33,22 @@ export default function Equipment() {
     {
       title: translate('Interval'),
       dataIndex: 'interval',
+      render: (interval) => {
+        return interval == 6 ? '6 Months' : (interval == 12 ? '1 Year' : (interval == 24 ? '2 Years': (interval == 48 ? '4 Years' : "")));
+      },
     },
     {
-      title: translate('Calibration Next Date'),
+      title: translate('Calibration_Next_Date'),
       dataIndex: 'nextDate',
       isDate: true,
     },
     {
       title: translate('Contact Person'),
       dataIndex: 'contact',
+    },
+    {
+      title: translate('Description'),
+      dataIndex: 'description',
     },
   ];
 
@@ -60,12 +68,15 @@ export default function Equipment() {
     {
       title: translate('Calibration Interval'),
       dataIndex: 'interval',
+      render: (interval) => {
+        return interval == 6 ? '6 Months' : (interval == 12 ? '1 Year' : (interval == 24 ? '2 Years': (interval == 48 ? '4 Years' : "")));
+      },
     },
     {
       title: translate('Calibration Next Date'),
       dataIndex: 'nextDate',
       render: (nextDate) => {
-        return dayjs(nextDate).format('DD/MM/YYYY');
+        return dayjs(nextDate).format('MM/DD/YYYY');
       },
     },
     {

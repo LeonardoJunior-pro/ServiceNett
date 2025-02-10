@@ -3,6 +3,7 @@ import useLanguage from '@/locale/useLanguage';
 import dayjs from 'dayjs';
 
 import LogTable from './components/LogTable';
+import UpcomingTable from './components/Upcoming';
 
 export default function NotificationModule() {
   const translate = useLanguage();
@@ -10,27 +11,26 @@ export default function NotificationModule() {
   const upcomingTableColumns = [
     {
       title: translate('schedule'),
-      dataIndex: ['date'],
+      dataIndex: ['nextDate'],
       render: (date) => {
-        return dayjs(date).format('DD/MM/YYYY');
+        return dayjs(date).format('MM/DD/YYYY');
       },
     },
     {
       title: translate('customer_name'),
-      dataIndex: ['equipment', 'createdBy', 'name'],
+      dataIndex: ['createdBy', 'name'],
+    },
+    {
+      title: translate('contact_person'),
+      dataIndex: ['contact'],
     },
     {
       title: translate('equipment_name'),
-      dataIndex: ['equipment', 'name'],
+      dataIndex: ['name'],
     },
     {
-      title: translate('Status'),
-      dataIndex: 'status',
-      render: (status) => {
-        let color = status === 'pending' ? 'green' : 'volcano';
-
-        return <Tag color={color}>{translate(status)}</Tag>;
-      },
+      title: translate('serial'),
+      dataIndex: ['serial'],
     },
   ];
 
@@ -39,7 +39,7 @@ export default function NotificationModule() {
       title: translate('notification_date'),
       dataIndex: 'date',
       render: (date) => {
-        return dayjs(date).format('DD/MM/YYYY');
+        return dayjs(date).format('MM/DD/YYYY');
       },
     },
     {
@@ -90,7 +90,7 @@ export default function NotificationModule() {
               {translate('Upcoming Calibrations')}
             </h3>
 
-            <LogTable entity={'upcoming'} dataTableColumns={upcomingTableColumns} />
+            <UpcomingTable entity={'upcoming'} dataTableColumns={upcomingTableColumns} />
           </div>
         </Col>
       </Row>

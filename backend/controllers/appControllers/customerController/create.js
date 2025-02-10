@@ -34,7 +34,7 @@ const create = async (req, res) => {
 
       equipment['createdBy'] = result._id;
       const equipment_result = await new EquipmentModel(equipment).save();
-      await notificationController.create(equipment_result);
+      // await notificationController.create(equipment_result);
       equipment_IDs.push(equipment_result._id);
     }
 

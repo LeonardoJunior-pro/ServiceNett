@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 
 const Model = mongoose.model('Equipment');
-const NotificationModel = mongoose.model('Notification');
 const CustomerModel = mongoose.model('Customer');
 
 const remove = async (req, res) => {
@@ -17,22 +16,6 @@ const remove = async (req, res) => {
         new: true, // return the new result instead of the old one
       }
     ).exec();
-
-    await NotificationModel.findOneAndUpdate(
-      { equipment: req.params.id, removed: false, status: 'pending' },
-      { $set: updates },
-      {
-        sort: { date: -1 },
-        new: true, // return the new result instead of the old one
-      }
-    ).exec();
-
-    // await NotificationModel.findOneAndDelete(
-    //   { equipment: req.params.id, removed: false, status: 'pending' },
-    //   {
-    //     sort: { date: -1 },
-    //   }
-    // ).exec();
 
     await CustomerModel.updateMany(
       { equipments: req.params.id }, // Find customers where equipment contains the ID

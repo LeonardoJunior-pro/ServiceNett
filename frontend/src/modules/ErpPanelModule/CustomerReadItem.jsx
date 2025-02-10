@@ -69,7 +69,7 @@ const EquipmentItem = ({ item }) => {
             textAlign: 'right',
           }}
         >
-          {item.interval == 6 ? '6 Months' : '1 Year'}
+          {item.interval == 6 ? '6 Months' : (item.interval == 12 ? '1 Year': (item.interval == 24 ? '2 Years' : (item.interval == 48 ? '4 Years' : "")))}
         </p>
       </Col>
       <Col className="gutter-row" span={5}>
@@ -79,7 +79,7 @@ const EquipmentItem = ({ item }) => {
             fontWeight: '700',
           }}
         >
-          {dayjs(item.nextDate).format("DD/MM/YYYY")}
+          {dayjs(item.nextDate).format('MM/DD/YYYY')}
         </p>
       </Col>
       <Col className="gutter-row" span={5}>
@@ -197,12 +197,16 @@ export default function CustomerReadItem({ config, selectedItem }) {
         <Descriptions.Item label={translate('Phone')}>{customer.phone}</Descriptions.Item>
       </Descriptions>
       <Divider />
-      
+
       {contactslist.length > 0 && (
         <>
           <Row gutter={[12, 0]}>
             <Col className="gutter-row" span={8}>
-              <p>
+              <p
+                style={{
+                  color: '#00000073',
+                }}
+              >
                 <strong>{translate('Contact Person')}</strong>
               </p>
             </Col>
@@ -210,6 +214,7 @@ export default function CustomerReadItem({ config, selectedItem }) {
               <p
                 style={{
                   textAlign: 'right',
+                  color: '#00000073',
                 }}
               >
                 <strong>{translate('Email')}</strong>
@@ -219,6 +224,7 @@ export default function CustomerReadItem({ config, selectedItem }) {
               <p
                 style={{
                   textAlign: 'right',
+                  color: '#00000073',
                 }}
               >
                 <strong>{translate('Phone')}</strong>
@@ -237,7 +243,11 @@ export default function CustomerReadItem({ config, selectedItem }) {
         <>
           <Row gutter={[12, 0]}>
             <Col className="gutter-row" span={5}>
-              <p>
+              <p
+                style={{
+                  color: '#00000073',
+                }}
+              >
                 <strong>{translate('Equipment')}</strong>
               </p>
             </Col>
@@ -245,6 +255,7 @@ export default function CustomerReadItem({ config, selectedItem }) {
               <p
                 style={{
                   textAlign: 'right',
+                  color: '#00000073',
                 }}
               >
                 <strong>{translate('Serial')}</strong>
@@ -254,6 +265,7 @@ export default function CustomerReadItem({ config, selectedItem }) {
               <p
                 style={{
                   textAlign: 'right',
+                  color: '#00000073',
                 }}
               >
                 <strong>{translate('Interval')}</strong>
@@ -263,6 +275,7 @@ export default function CustomerReadItem({ config, selectedItem }) {
               <p
                 style={{
                   textAlign: 'right',
+                  color: '#00000073',
                 }}
               >
                 <strong>{translate('Calibrate Date')}</strong>
@@ -272,6 +285,7 @@ export default function CustomerReadItem({ config, selectedItem }) {
               <p
                 style={{
                   textAlign: 'right',
+                  color: '#00000073',
                 }}
               >
                 <strong>{translate('Contact Person')}</strong>

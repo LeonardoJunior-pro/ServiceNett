@@ -1,4 +1,4 @@
-import { Form, Input, message, Select, DatePicker, Row, Col } from 'antd';
+import { Form, Input, Select, DatePicker, Row, Col } from 'antd';
 import { UserOutlined, CalendarOutlined } from '@ant-design/icons';
 
 import { useEffect, useState } from 'react';
@@ -6,6 +6,8 @@ import useLanguage from '@/locale/useLanguage';
 import dayjs from 'dayjs';
 
 import { request } from '@/request';
+
+const { TextArea } = Input;
 
 export default function EquipmentForm({ isUpdateForm = false }) {
   const translate = useLanguage();
@@ -74,8 +76,10 @@ export default function EquipmentForm({ isUpdateForm = false }) {
   };
 
   const intervalItems = [
-    { label: '6 Months', value: '6' },
-    { label: '1 Year', value: '12' },
+    { label: '6 Months', value: 6 },
+    { label: '1 Year', value: 12 },
+    { label: '2 Year', value: 24 },
+    { label: '4 Year', value: 48 },
   ];
 
   return (
@@ -141,11 +145,8 @@ export default function EquipmentForm({ isUpdateForm = false }) {
               {
                 required: true,
               },
-              {
-                validator: validateEmptyString,
-              },
             ]}
-            initialValue={'6'}
+            initialValue={6}
           >
             <Select suffixIcon={<CalendarOutlined />} options={intervalItems} />
           </Form.Item>
@@ -167,7 +168,7 @@ export default function EquipmentForm({ isUpdateForm = false }) {
         </Col>
         <Col className="gutter-row" span={24}>
           <Form.Item
-            label={translate('customer')}
+            label={translate('Contact Person')}
             name="contact"
             rules={[
               {
@@ -179,6 +180,14 @@ export default function EquipmentForm({ isUpdateForm = false }) {
             ]}
           >
             <Select suffixIcon={<UserOutlined />} options={contactItems} />
+          </Form.Item>
+        </Col>
+        <Col className="gutter-row" span={24}>
+          <Form.Item
+            label={translate('description')}
+            name="description"
+          >
+            <TextArea rows={4} placeholder="Description" />
           </Form.Item>
         </Col>
       </Row>

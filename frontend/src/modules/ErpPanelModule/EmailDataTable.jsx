@@ -5,6 +5,7 @@ import {
   RedoOutlined,
   PlusOutlined,
   EllipsisOutlined,
+  DeleteOutlined,
 } from '@ant-design/icons';
 import { Descriptions, Dropdown, Table, Button } from 'antd';
 import { PageHeader } from '@ant-design/pro-layout';
@@ -64,6 +65,11 @@ export default function EmailDataTable({ config, extra = [] }) {
     ...extra,
     {
       type: 'divider',
+    },
+    {
+      label: translate('Delete'),
+      key: 'delete',
+      icon: <DeleteOutlined />,
     },
   ];
 
@@ -137,7 +143,7 @@ export default function EmailDataTable({ config, extra = [] }) {
   const dispatch = useDispatch();
 
   const handelDataTableLoad = (pagination) => {
-    const options = { page: pagination.current || 1, items: pagination.pageSize || 10 };
+    const options = { page: pagination.current || 1, items: pagination.pageSize || 5 };
     dispatch(erp.list({ entity, options }));
   };
 
