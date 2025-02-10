@@ -1,5 +1,6 @@
 import CustomerDataTableModule from '@/modules/CustomerModule/CustomerDataTableModule';
 import useLanguage from '@/locale/useLanguage';
+import dayjs from 'dayjs';
 
 export default function Customer() {
   const translate = useLanguage();
@@ -26,6 +27,9 @@ export default function Customer() {
     {
       title: translate('Last Activity'),
       dataIndex: 'lastActivity',
+      render: (date) => {
+        return dayjs(date).format('MM/DD/YYYY');
+      },
     },
   ];
 

@@ -8,11 +8,41 @@ const paginatedList = async (req, res) => {
   const skip = page * limit - limit;
   try {
     //  Query the database for a list of all results
-    const resultsPromise = Model.find({ removed: false })
-      .skip(skip)
-      .limit(limit)
-      .sort({ created: 'desc' })
-      .populate('createdBy', 'name');
+    // const resultsPromise = Model.find({ removed: false })
+    //   .skip(skip)
+    //   .limit(limit)
+    //   .sort({ created: 'desc' })
+    //   .populate('createdBy', 'name');
+
+    const resultsPromise = Model.aggregate([
+      {
+        $match: { removed: false } // Filter customers where removed is false
+      },
+      {
+        $lookup: {
+          from: 'equipment', // Reference the Equipment collection
+          localField: 'equipments', // Field in Customer collection
+          foreignField: '_id', // Matching _id in Equipment collection
+          as: 'equipmentsData' // Store matched equipment data in an array
+        }
+      },
+      {
+        $addFields: {
+          lastActivity: {
+            $max: '$equipmentsData.updated' // Extract the latest updatedAt date
+          }
+        }
+      },
+      {
+        $sort: { created: -1 } // Sort customers by created date (descending)
+      },
+      {
+        $skip: skip // Pagination - Skip N documents
+      },
+      {
+        $limit: limit // Pagination - Limit results
+      },
+    ]);
     // Counting the total documents
     const countPromise = Model.countDocuments({ removed: false });
     // Resolving both promises

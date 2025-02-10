@@ -10,7 +10,6 @@ const create = async (req, res) => {
 
     // Creating a new document in the collection
     let result = await new Model(body).save();
-    await notificationController.create(result);
     await CustomerModel.updateOne(
       { _id: result.createdBy }, // Find the specific customer by ID
       { 
